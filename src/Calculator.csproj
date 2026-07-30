@@ -1,0 +1,51 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <!-- The calculator UI is a WPF window shown on a dedicated STA thread. -->
+    <UseWPF>true</UseWPF>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    <OutDir>bin\$(Configuration)\</OutDir>
+  </PropertyGroup>
+
+  <!-- keep the Release output flat and clean: it is packed into the store package as-is -->
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- ENCY 3. The 3.x SDK is still a release candidate - the only 3.x published on the public
+         feed - so the version is pinned rather than floated. The framework stays net8.0-windows on
+         purpose: the SDK's own assemblies are netstandard2.0, so nothing here needs net10, and the
+         CI image does not change. -->
+    <PackageReference Include="EncySoftware.CAMAPI.Sdk.Net" Version="3.0.1-rc.22" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Calculator.settings.json" CopyToOutputDirectory="Always" />
+    <None Update="package.info.json" CopyToOutputDirectory="Always" />
+    <None Update="readme.md" CopyToOutputDirectory="Always" />
+    <!-- Pictures of the extension: the store turns them into the card's screenshots and takes the
+         first one as its cover. Only image extensions are copied, and Link flattens them into the
+         output root, because CI uploads only the top level of the build output. -->
+    <None Include="screenshots\*.png;screenshots\*.jpg;screenshots\*.jpeg;screenshots\*.gif;screenshots\*.webp"
+          CopyToOutputDirectory="Always" Link="%(Filename)%(Extension)" />
+  </ItemGroup>
+
+  <!-- The SDK's transitive packages copy ~60 doc xmls into the output via their own
+       AfterTargets="Build" hooks, which run after any hook declared here. PackReady therefore
+       DEPENDS on Build: its body executes only after Build and all its hooks are done.
+       Build with `dotnet build src -c Release -t:PackReady` to get an output folder that is
+       clean to pack into the store package as-is. -->
+  <Target Name="PackReady" DependsOnTargets="Build">
+    <ItemGroup>
+      <_SdkJunk Include="$(OutDir)*.xml" Exclude="$(OutDir)$(AssemblyName).xml" />
+      <_SdkJunk Include="$(OutDir)*.stbuildresult.json" />
+    </ItemGroup>
+    <Delete Files="@(_SdkJunk)" />
+    <Message Importance="high" Text="PackReady: output cleaned for packing -> $(OutDir)" />
+  </Target>
+</Project>

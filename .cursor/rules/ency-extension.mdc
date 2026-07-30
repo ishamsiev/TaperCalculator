@@ -1,0 +1,74 @@
+---
+description: How this ENCY extension repo is wired — anatomy, invariants, publish flow
+alwaysApply: true
+---
+
+# ENCY extension — how this repo works
+
+This is an extension for ENCY CAM, published to the ENCY Extension Store by CI.
+
+## Anatomy (all under `src/`)
+
+- `ExtensionFactory.cs` — the entry point. The class MUST stay `CAMAPI.ExtensionFactory`
+  (namespace + name is how ENCY finds it). It maps extension **id strings** to instances.
+- `*.settings.json` — declares the extensions inside this dll for ENCY. Each declared `id`
+  MUST have a matching branch in `ExtensionFactory.Create`. `module_path` must point at the
+  built dll name: `${extensionJsonFolder}/<AssemblyName>.dll`.
+- `Extension.cs` (`UtilityExtension`) — the actual logic. A utility implements `IExtension` +
+  `IExtensionUtility` and does its work in `Run(IExtensionUtilityContext, out TResultStatus)`.
+  Exceptions do not cross the host boundary: catch everything, report via `TResultStatus`.
+- `package.info.json` — store metadata. Keep `packageId` = assembly name. `tags` MUST keep
+  the `ency-extension` marker or the catalog will not index the package. `sdkVersion` drives
+  the "minimal ENCY version" hint — bump it together with the `EncySoftware.CAMAPI.Sdk.Net`
+  package version. Do not set `iconPath` (packing chokes on it today).
+- `readme.md` — becomes the store card. Write it for users, not developers.
+
+## Rules
+
+- **This template targets ENCY 3.** The SDK is `EncySoftware.CAMAPI.Sdk.Net` **3.0.1-rc.22** —
+  a release candidate, because that is the only 3.x published so far. Do NOT swap it for a 2.x
+  version to "get something stable": 2.x is the previous generation of ENCY, and an extension built
+  against it is an extension for the old product. Say so plainly if the pinned rc is a problem
+  rather than quietly moving to 2.x.
+- Target stays `net8.0-windows` — the SDK's own assemblies are `netstandard2.0`, so ENCY 3 needs no
+  newer framework here, and the CI image stays as it is.
+- The SDK package comes from the public `ency-master` feed (see `nuget.config`) — do not add other
+  ENCY feeds.
+- Build for packing with `dotnet build src -c Release -t:PackReady` (normal build + sweeps
+  the SDK doc-xmls out of the output; the output folder is packed into the package as-is).
+- CAMAPI COM objects should be wrapped in `ComWrapper<T>` (see `Extension.cs`) and disposed.
+- Version is stamped from the git tag at publish (`v1.2.3` → `1.2.3`); the value in
+  `package.info.json` only matters for local packing.
+
+## Which kind of extension to write
+
+Pick the entry point FIRST, then read its rule before writing any code.
+
+| The extension should... | Kind | Rule to read |
+|---|---|---|
+| add a button to the utilities menu | utility | `type-utility.mdc` |
+| run code when ENCY starts or exits | global | `type-global.mdc` |
+| change how another utility runs | utility runner | `type-utility-runner.mdc` |
+| add a right-click item on an operation | operation popup | `type-operation-popup.mdc` |
+| add a right-click item on a geometry node | geometry node popup | `type-geom-node-popup.mdc` |
+| compute a toolpath itself | operation solver | `type-operation-solver.mdc` |
+| post-process a calculated toolpath | CLData converter | `type-cldata-converter.mdc` |
+| talk to a PLM system | PLM | `type-plm.mdc` |
+
+`ency-cookbook.mdc` applies to all of them: COM lifetime, error handling, parameter input, windows.
+
+This template ships a **utility**. Changing the kind means changing three things together: the class
+(its role interface), the key in `*.settings.json`, and the branch in `ExtensionFactory.Create`.
+
+## Publishing
+
+Push a version tag — CI builds, packs and publishes to the store:
+
+```bash
+git tag v0.1.0 && git push --tags
+```
+
+Or use the `ency-extension-store` MCP tools when available: `publish_extension` (tags and
+pushes for you), then `publish_status` (run status → store card link). A NEW extension lands
+hidden until a store moderator approves it; the direct card link works immediately. New
+versions of an approved extension go live without moderation.

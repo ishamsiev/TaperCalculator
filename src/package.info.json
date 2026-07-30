@@ -1,0 +1,17 @@
+{
+  "packageId": "Calculator",
+  "version": "0.1.0",
+  "targetFramework": "net8.0",
+  "sdkVersion": "3.0.1-rc.22",
+  "dependencies": [
+    {
+      "id": "EncySoftware.CAMAPI.SDK.Net",
+      "version": "3.0.1-rc.22"
+    }
+  ],
+  "description": "A built-in engineering calculator for ENCY. Opens from the utilities menu in an ENCY-styled window and evaluates arithmetic, trigonometry (sin/cos/tan, degrees or radians), powers, roots, logarithms and constants (pi, e). Non-modal, so you can keep working in ENCY while it stays open.",
+  "author": "ishamsiev",
+  "tags": "Utility, Calculator, Engineering, ency-extension",
+  "iconPath": "",
+  "requiresRestart": false
+}

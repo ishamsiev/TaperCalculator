@@ -1,0 +1,14 @@
+{
+    "name": "Engineering Calculator",
+    "description": "Built-in engineering calculator for ENCY: arithmetic, trigonometry, powers, roots and logarithms in an ENCY-styled window.",
+    "module_path": "${extensionJsonFolder}/Calculator.dll",
+    "extensions": [
+        {
+            "utility": {
+                "name": "Engineering Calculator",
+                "caption": "Calculator",
+                "id": "Extension.Utility.Calculator"
+            }
+        }
+    ]
+}
