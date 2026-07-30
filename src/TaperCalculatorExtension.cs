@@ -3,10 +3,10 @@ using CAMAPI.DotnetHelper;
 using CAMAPI.Extensions;
 using CAMAPI.ResultStatus;
 
-namespace Calculator;
+namespace TaperCalculator;
 
 /// <summary>
-/// Utility entry point: opens the engineering calculator window from the ENCY utilities menu.
+/// Utility entry point: opens the Taper Calculator window from the ENCY utilities menu.
 ///
 /// The window is a WPF window shown on its own STA thread (the ENCY bridge runs MTA, WPF needs STA)
 /// and it is non-modal - the user keeps working in ENCY while it stays open. Because the window
@@ -15,7 +15,7 @@ namespace Calculator;
 /// the <see cref="CanUnload"/> bookkeeping, so ENCY does not unload the assembly while the window is
 /// still alive.
 /// </summary>
-public class CalculatorExtension : IExtension, IExtensionUtility, IExtensionLazyUnloadable
+public class TaperCalculatorExtension : IExtension, IExtensionUtility, IExtensionLazyUnloadable
 {
     private readonly ExtensionWindowLazyUnloadable _windowManager = new();
 
@@ -32,7 +32,7 @@ public class CalculatorExtension : IExtension, IExtensionUtility, IExtensionLazy
         resultStatus = default;
         try
         {
-            // Parent the calculator to the ENCY main window so it stacks above it. The calculator
+            // Parent the window to the ENCY main window so it stacks above it. The calculator
             // needs no CAM data, so nothing else is read from the application.
             using (var applicationCom = ComWrapper.Create(context.CamApplication))
             {
@@ -43,7 +43,7 @@ public class CalculatorExtension : IExtension, IExtensionUtility, IExtensionLazy
             // until it closes. A failure on the STA thread cannot be surfaced through resultStatus
             // (Run has already returned by then), so it is swallowed rather than crossing threads.
             _windowManager.ShowWindow(
-                () => new CalculatorWindow(),
+                () => new TaperCalculatorWindow(),
                 onClosed: () => { },
                 onException: ex => { });
         }
@@ -54,7 +54,7 @@ public class CalculatorExtension : IExtension, IExtensionUtility, IExtensionLazy
         }
     }
 
-    /// <summary>Allow unloading only when the calculator window is closed.</summary>
+    /// <summary>Allow unloading only when the window is closed.</summary>
     public bool CanUnload
     {
         get => _windowManager.CanUnload;

@@ -1,4 +1,4 @@
-using Calculator;
+using TaperCalculator;
 
 // The namespace and class name must stay CAMAPI.ExtensionFactory - that is how ENCY finds
 // the entry point of the library.
@@ -26,15 +26,15 @@ public class ExtensionFactory : IExtensionFactory
 
     /// <summary>
     /// Create an extension instance by its identifier. The identifier must match the "id"
-    /// declared in Calculator.settings.json.
+    /// declared in TaperCalculator.settings.json.
     /// </summary>
     public IExtension? Create(string extensionIdent, out TResultStatus ret)
     {
         try
         {
             ret = default;
-            if (extensionIdent == "Extension.Utility.Calculator")
-                return new CalculatorExtension();
+            if (extensionIdent == "Extension.Utility.TaperCalculator")
+                return new TaperCalculatorExtension();
             throw new Exception("Unknown extension identifier: " + extensionIdent);
         }
         catch (Exception e)

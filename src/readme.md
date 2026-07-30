@@ -1,30 +1,27 @@
-# Engineering Calculator
+# Taper Calculator
 
-A built-in engineering calculator for ENCY 3. It adds a **Calculator** button to the utilities
-menu; clicking it opens a compact, ENCY-styled calculator window that stays open while you keep
-working in ENCY (non-modal).
+A shop-floor geometry helper for ENCY 3. It adds a **Taper Calculator** button to the utilities
+menu; clicking it opens a compact, ENCY-styled window that stays open while you keep working in
+ENCY (non-modal).
 
 ## Features
 
-- **Arithmetic:** `+  −  ×  ÷`, parentheses, percent, factorial (`n!`)
-- **Powers & roots:** `x^y`, `x²`, square root, cube root
-- **Trigonometry:** `sin cos tan` and inverse `asin acos atan`, switchable **DEG / RAD**
-- **Logarithms & exp:** natural `ln`, base-10 `log`, `exp`
-- **Constants:** `π`, `e`
-- **Free-form entry:** type a whole expression such as `2*(3+4)^2 - sqrt(81)` and press `=` / Enter
+- **Taper / Cone:** enter any three of {big diameter D, small diameter d, length L, half angle α}
+  and it solves the fourth, plus the included angle and the taper ratio `1 : X`.
+- **Right triangle:** enter two sides, or one side and angle A, to get every remaining side and
+  angle — handy for chamfers, slopes and angular allowances.
+- **Metric thread (ISO):** enter the nominal diameter and pitch (leave the pitch empty to use the
+  standard coarse pitch) to get the fundamental height H, pitch diameter d2, minor diameter d1,
+  thread depth h3 and an approximate tap-drill diameter.
 
 ## How to use
 
-1. Open the utilities menu in ENCY and click **Calculator**.
-2. Enter an expression with the on-screen keys or straight from the keyboard.
-3. Press `=` or **Enter** to evaluate. `Esc` or **C** clears; `⌫` deletes the last character.
-4. Toggle **DEG / RAD** to choose how angles are interpreted in trig functions.
-
-## Supported functions
-
-`sin cos tan asin acos atan sqrt cbrt ln log exp abs` — plus operators `+ - * / ^ %` and `!`.
+1. Open the utilities menu in ENCY and click **Taper Calculator**.
+2. Pick a tab, fill in the known values (both `.` and `,` work as the decimal mark).
+3. Press **Solve** to compute, or **Clear** to reset the tab for the next part.
 
 ## Notes
 
-- The calculator is self-contained and does not modify your project or geometry.
-- Window is non-modal, so it can stay open next to your work.
+- Self-contained: it does not modify your project or geometry.
+- Non-modal window, so it can stay open next to your work.
+- Angles are in degrees; diameters and lengths share whatever unit you type.

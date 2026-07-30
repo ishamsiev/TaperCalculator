@@ -1,5 +1,5 @@
 {
-  "packageId": "Calculator",
+  "packageId": "TaperCalculator",
   "version": "0.1.0",
   "targetFramework": "net8.0",
   "sdkVersion": "3.0.1-rc.22",
@@ -9,9 +9,9 @@
       "version": "3.0.1-rc.22"
     }
   ],
-  "description": "A built-in engineering calculator for ENCY. Opens from the utilities menu in an ENCY-styled window and evaluates arithmetic, trigonometry (sin/cos/tan, degrees or radians), powers, roots, logarithms and constants (pi, e). Non-modal, so you can keep working in ENCY while it stays open.",
+  "description": "Shop-floor geometry helper for ENCY. Opens from the utilities menu in an ENCY-styled, non-modal window and solves the everyday machinist geometry: tapers/cones (any three of big/small diameter, length, half angle), right triangles (for chamfers and slopes) and ISO metric threads (pitch, pitch/minor diameter, thread depth, tap-drill size).",
   "author": "ishamsiev",
-  "tags": "Utility, Calculator, Engineering, ency-extension",
+  "tags": "Utility, Geometry, Machinist, Taper, Thread, ency-extension",
   "iconPath": "",
   "requiresRestart": false
 }

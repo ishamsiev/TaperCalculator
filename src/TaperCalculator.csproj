@@ -3,7 +3,7 @@
     <TargetFramework>net8.0-windows</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <!-- The calculator UI is a WPF window shown on a dedicated STA thread. -->
+    <!-- The UI is a WPF window shown on a dedicated STA thread. -->
     <UseWPF>true</UseWPF>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Calculator.settings.json" CopyToOutputDirectory="Always" />
+    <None Update="TaperCalculator.settings.json" CopyToOutputDirectory="Always" />
     <None Update="package.info.json" CopyToOutputDirectory="Always" />
     <None Update="readme.md" CopyToOutputDirectory="Always" />
     <!-- Pictures of the extension: the store turns them into the card's screenshots and takes the

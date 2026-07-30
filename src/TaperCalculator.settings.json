@@ -1,0 +1,14 @@
+{
+    "name": "Taper Calculator",
+    "description": "Shop-floor geometry helper for ENCY: solves tapers/cones, right triangles and ISO metric threads in an ENCY-styled window.",
+    "module_path": "${extensionJsonFolder}/TaperCalculator.dll",
+    "extensions": [
+        {
+            "utility": {
+                "name": "Taper Calculator",
+                "caption": "Taper Calculator",
+                "id": "Extension.Utility.TaperCalculator"
+            }
+        }
+    ]
+}
