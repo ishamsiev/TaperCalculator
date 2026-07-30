@@ -11,12 +11,13 @@ namespace Calculator;
 /// The window is a WPF window shown on its own STA thread (the ENCY bridge runs MTA, WPF needs STA)
 /// and it is non-modal - the user keeps working in ENCY while it stays open. Because the window
 /// outlives the <see cref="Run"/> call, the extension is <see cref="IExtensionLazyUnloadable"/>:
-/// it reports <see cref="CanUnload"/> == false until the window is closed, so ENCY does not unload
-/// the assembly while the window is still alive.
+/// the <see cref="ExtensionWindowLazyUnloadable"/> helper owns the owner handle, the STA thread and
+/// the <see cref="CanUnload"/> bookkeeping, so ENCY does not unload the assembly while the window is
+/// still alive.
 /// </summary>
 public class CalculatorExtension : IExtension, IExtensionUtility, IExtensionLazyUnloadable
 {
-    private bool _canUnload = true;
+    private readonly ExtensionWindowLazyUnloadable _windowManager = new();
 
     /// <inheritdoc />
     public IExtensionInfo? Info { get; set; }
@@ -31,31 +32,23 @@ public class CalculatorExtension : IExtension, IExtensionUtility, IExtensionLazy
         resultStatus = default;
         try
         {
-            // Owner handle so the calculator sits on top of the ENCY main window. The calculator
-            // itself needs no CAM data, so no COM object is captured by the window.
-            long ownerHandle = 0;
-            try
+            // Parent the calculator to the ENCY main window so it stacks above it. The calculator
+            // needs no CAM data, so nothing else is read from the application.
+            using (var applicationCom = ComWrapper.Create(context.CamApplication))
             {
-                using var applicationCom = ComWrapper.Create(context.CamApplication);
-                using var mainFormCom = applicationCom.MainForm();
-                ownerHandle = mainFormCom.MainWindowHandle();
-            }
-            catch
-            {
-                // No main-window handle available (e.g. headless host) - open ownerless.
-                ownerHandle = 0;
+                _windowManager.SetOwnerHandle(applicationCom);
             }
 
-            // The window is alive from here until the user closes it: block unloading until then.
-            _canUnload = false;
-            WindowHelper.ShowStaWindow(
-                ownerHandle,
+            // Non-modal: the helper runs the window on its own STA thread and keeps CanUnload false
+            // until it closes. A failure on the STA thread cannot be surfaced through resultStatus
+            // (Run has already returned by then), so it is swallowed rather than crossing threads.
+            _windowManager.ShowWindow(
                 () => new CalculatorWindow(),
-                () => _canUnload = true);
+                onClosed: () => { },
+                onException: ex => { });
         }
         catch (Exception e)
         {
-            _canUnload = true;
             resultStatus.Code = TResultStatusCode.rsError;
             resultStatus.Description = e.Message;
         }
@@ -64,7 +57,7 @@ public class CalculatorExtension : IExtension, IExtensionUtility, IExtensionLazy
     /// <summary>Allow unloading only when the calculator window is closed.</summary>
     public bool CanUnload
     {
-        get => _canUnload;
+        get => _windowManager.CanUnload;
         set { }
     }
 }
