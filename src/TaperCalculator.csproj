@@ -17,9 +17,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- ENCY 3.1.1 ships CAM API SDK 3.0.12, whose .NET helpers target .NET 10. Keep the
-         framework and SDK pinned to that release combination. -->
-    <PackageReference Include="EncySoftware.CAMAPI.Sdk.Net" Version="3.0.12" />
+    <!-- The released ENCY Store currently accepts CAM API SDK 3.0.8. Keep this combination
+         pinned so the published package can be installed by released ENCY 3. -->
+    <PackageReference Include="EncySoftware.CAMAPI.Sdk.Net" Version="3.0.8" />
   </ItemGroup>
 
   <ItemGroup>

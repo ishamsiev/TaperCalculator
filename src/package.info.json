@@ -1,12 +1,12 @@
 {
   "packageId": "TaperCalculator",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "targetFramework": "net10.0",
-  "sdkVersion": "3.0.12",
+  "sdkVersion": "3.0.8",
   "dependencies": [
     {
       "id": "EncySoftware.CAMAPI.SDK.Net",
-      "version": "3.0.12"
+      "version": "3.0.8"
     }
   ],
   "description": "Shop-floor geometry helper for ENCY. Opens from the utilities menu in an ENCY-styled, non-modal window and solves the everyday machinist geometry: tapers/cones (any three of big/small diameter, length, half angle), right triangles (for chamfers and slopes) and ISO metric threads (pitch, pitch/minor diameter, thread depth, tap-drill size).",
