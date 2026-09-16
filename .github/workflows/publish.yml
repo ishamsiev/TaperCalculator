@@ -32,7 +32,7 @@ permissions:
 
 jobs:
   publish:
-    runs-on: windows-latest    # net8.0-windows target; pure net8.0 could use ubuntu-latest
+    runs-on: windows-latest    # net10.0-windows target; pure net10.0 could use ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
@@ -40,7 +40,7 @@ jobs:
 
       - uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '10.0.x'
 
       # dotnet build (NOT publish) keeps the output flat; the PackReady target then sweeps the
       # SDK doc-xmls out, leaving exactly the files that belong in the store package.

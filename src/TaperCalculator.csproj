@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net8.0-windows</TargetFramework>
+    <TargetFramework>net10.0-windows</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <!-- The UI is a WPF window shown on a dedicated STA thread. -->
@@ -17,11 +17,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- ENCY 3. The 3.x SDK is still a release candidate - the only 3.x published on the public
-         feed - so the version is pinned rather than floated. The framework stays net8.0-windows on
-         purpose: the SDK's own assemblies are netstandard2.0, so nothing here needs net10, and the
-         CI image does not change. -->
-    <PackageReference Include="EncySoftware.CAMAPI.Sdk.Net" Version="3.0.1-rc.22" />
+    <!-- ENCY 3.1.1 ships CAM API SDK 3.0.12, whose .NET helpers target .NET 10. Keep the
+         framework and SDK pinned to that release combination. -->
+    <PackageReference Include="EncySoftware.CAMAPI.Sdk.Net" Version="3.0.12" />
   </ItemGroup>
 
   <ItemGroup>
